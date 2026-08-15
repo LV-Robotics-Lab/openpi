@@ -62,6 +62,14 @@ class RepositoryContractTest(unittest.TestCase):
         self.assertIn("${PI0_AUDIT_LEROBOT_ROOT}", text)
         self.assertNotIn("DRAG_DEMO", text)
 
+    def test_tool_is_not_an_openpi_workspace_member(self) -> None:
+        repository_pyproject = ROOT.parents[1] / "pyproject.toml"
+        if not repository_pyproject.is_file():
+            self.skipTest("standalone source checkout")
+        text = repository_pyproject.read_text()
+        self.assertIn('members = ["packages/*"]', text)
+        self.assertNotIn("tools/pi0_attention_audit", text)
+
     def test_canonical_action_expert_method_is_explicit(self) -> None:
         self.assertEqual(
             ACTION_EXPERT_METHOD_ID,
