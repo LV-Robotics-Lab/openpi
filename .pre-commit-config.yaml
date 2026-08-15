@@ -1,4 +1,4 @@
-exclude: third_party/
+exclude: ^(third_party/|tools/pi0_attention_audit/)
 
 repos:
   - repo: https://github.com/astral-sh/uv-pre-commit
