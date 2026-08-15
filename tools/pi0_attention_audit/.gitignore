@@ -1,0 +1,22 @@
+.DS_Store
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
+
+# Runtime inputs and outputs never belong in Git.
+checkpoints/
+models/
+data/
+datasets/
+outputs/
+release/*.tar.gz
+release/*.zip
+*.safetensors
+*.pt
+*.pth
+*.ckpt

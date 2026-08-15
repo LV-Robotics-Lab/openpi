@@ -1,0 +1,38 @@
+name: Pi0 attention audit
+
+on:
+  pull_request:
+    paths:
+      - "tools/pi0_attention_audit/**"
+      - ".github/workflows/attention-audit.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "tools/pi0_attention_audit/**"
+      - ".github/workflows/attention-audit.yml"
+  workflow_dispatch:
+
+jobs:
+  lightweight-contract:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tools/pi0_attention_audit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Set up Python
+        run: uv python install 3.12
+      - name: Install the isolated audit environment
+        run: uv sync --frozen --extra dev
+      - name: Run unit and public-boundary tests
+        run: uv run pytest tests
+      - name: Lint the audit tool
+        run: uv run ruff check src tests
+      - name: Validate the example contract without runtime data
+        run: >-
+          uv run pi0-attention validate
+          --config configs/attention_comparison.example.toml
+          --source deployment
+          --allow-missing

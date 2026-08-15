@@ -1,0 +1,46 @@
+[models]
+with_hand = "${PI0_WITH_HAND_CHECKPOINT}"
+without_hand = "${PI0_WITHOUT_HAND_CHECKPOINT}"
+tokenizer = "google/paligemma-3b-pt-224"
+
+[analysis]
+task_prompt = "move the object to the target area"
+state_dim = 32
+action_dim = 32
+chunk_size = 50
+num_joints = 7
+num_image_patches = 256
+patch_grid = 16
+num_denoising_steps = 10
+image_token_id = 257152
+tokenizer_max_length = 48
+random_seed = 1000
+
+[regions]
+object_area = [0.05, 0.10, 0.50, 0.70]
+target_area = [0.45, 0.10, 0.90, 0.70]
+robot_zone = [0.15, 0.55, 0.85, 1.00]
+bg_top = [0.00, 0.00, 1.00, 0.12]
+
+[deployment]
+root = "${PI0_AUDIT_DEPLOY_ROOT}"
+episodes = [0, 2]
+frame_stride = 25
+video_name = "cam_top_rgb.mp4"
+state_name = "state.pkl"
+state_keys = ["right_arm", "joints"]
+
+[lerobot]
+root = "${PI0_AUDIT_LEROBOT_ROOT}"
+episodes = [0, 15, 30, 45, 60, 75]
+frame_stride = 50
+video_subdir = "videos/chunk-000/observation.images.top"
+parquet_subdir = "data/chunk-000"
+state_column = "observation.state"
+
+[siglip]
+episodes = [0, 5, 10, 20, 30]
+frame_indices = [20, 50, 90, 130]
+
+[output]
+root = "${PI0_AUDIT_OUTPUT}"
